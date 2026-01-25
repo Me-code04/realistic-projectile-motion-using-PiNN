@@ -221,3 +221,9 @@ plot!(
 )
 
 savefig(plt_yz_zone, "traj_yz_zone.png")
+
+println("Ranges:")
+println("x: ", (minimum(df.x), maximum(df.x)))
+println("y: ", (minimum(df.y), maximum(df.y)))
+println("z: ", (minimum(df.z), maximum(df.z)))
+println("t: ", (minimum(df.t), maximum(df.t)))
