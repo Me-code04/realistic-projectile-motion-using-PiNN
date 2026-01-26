@@ -39,16 +39,21 @@ class StatcastDataset(torch.utils.data.Dataset):
         df = pd.read_csv(csv_path)
 
         # --- rename / adapt here if your CSV uses different column names ---
+        # --- Positions (ft -> m)
         r0_ft = df[["release_pos_x", "release_pos_y", "release_pos_z"]].to_numpy(dtype=np.float32)
+        r0 = r0_ft * FT_TO_M
+
+        # --- Velocities (ft/s -> m/s)
         v0_fts = df[["vx0", "vy0", "vz0"]].to_numpy(dtype=np.float32)
-        a_fts2 = df[["ax", "ay", "az"]].to_numpy(dtype=np.float32)
+        v0 = v0_fts * FT_TO_M
+
+        # --- Accelerations (ft/s^2 -> m/s^2)
+        a0_fts2 = df[["ax", "ay", "az"]].to_numpy(dtype=np.float32)
+        a0 = a0_fts2 * FT_TO_M
+
+        # --- Spin
         spin_rate = df["release_spin_rate"].to_numpy(dtype=np.float32)
         spin_axis = df["spin_axis"].to_numpy(dtype=np.float32)
-
-        # Convert to SI
-        r0 = r0_ft * FT_TO_M
-        v0 = v0_fts * FT_TO_M
-        a0 = a_fts2 * FT_TO_M
         omega0 = spin_to_omega(spin_rate, spin_axis).astype(np.float32)
 
         # Time grids
